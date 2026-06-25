@@ -25,6 +25,7 @@
 | [03-automation-feasibility.md](./03-automation-feasibility.md) | 三种技术路线对比与推荐实施路径 |
 | [04-open-source-references.md](./04-open-source-references.md) | 开源项目与 CLI 工具参考 |
 | [05-risks-and-next-steps.md](./05-risks-and-next-steps.md) | 风控、合规风险与后续调研计划 |
+| [06-mcp-integration.md](./06-mcp-integration.md) | **MCP 服务调研与 Cursor 接入** |
 
 ## 关键官方入口
 

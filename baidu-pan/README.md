@@ -36,6 +36,7 @@
 | [01-official-api.md](./01-official-api.md) | 百度网盘开放平台官方 API |
 | [02-web-cookie-flow.md](./02-web-cookie-flow.md) | Web Cookie 协议与接口参数 |
 | [03-subtask-design.md](./03-subtask-design.md) | 子任务拆分与错误码 |
+| [04-mcp-integration.md](./04-mcp-integration.md) | **MCP 服务调研与 Cursor 接入** |
 | [demo/README.md](../demo/README.md) | Demo 运行说明 |
 
 ## 技术路线结论

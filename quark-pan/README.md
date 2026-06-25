@@ -37,6 +37,7 @@
 |------|------|
 | [01-web-cookie-flow.md](./01-web-cookie-flow.md) | Web API 与参数 |
 | [02-subtask-design.md](./02-subtask-design.md) | 子任务拆分与错误码 |
+| [03-mcp-integration.md](./03-mcp-integration.md) | **MCP 服务调研与 Cursor 接入** |
 | [demo/README.md](../demo/README.md) | 统一 Demo 说明 |
 
 ## 关键 Cookie

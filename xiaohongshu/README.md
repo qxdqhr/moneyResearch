@@ -65,6 +65,7 @@ Cookie（含 a1、web_session）
 | [02-web-cookie-flow.md](./02-web-cookie-flow.md) | Cookie、签名、核心 HTTP 接口 |
 | [03-subtask-design.md](./03-subtask-design.md) | Demo 子任务拆分与错误处理 |
 | [04-open-source-references.md](./04-open-source-references.md) | 开源项目参考 |
+| [05-mcp-integration.md](./05-mcp-integration.md) | **MCP 服务调研与 Cursor 接入** |
 | [demo/README.md](../demo/README.md) | 统一 Demo 运行说明 |
 
 ## Demo 代码

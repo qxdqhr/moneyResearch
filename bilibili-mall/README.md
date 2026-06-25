@@ -63,6 +63,7 @@ Cookie（SESSDATA + bili_jct）
 | [02-ticket-api.md](./02-ticket-api.md) | 票务核心接口 |
 | [03-mall-market-api.md](./03-mall-market-api.md) | 会员购市集接口 |
 | [04-subtask-design.md](./04-subtask-design.md) | Demo 子任务设计 |
+| [05-mcp-integration.md](./05-mcp-integration.md) | **MCP 服务调研与 Cursor 接入** |
 | [demo/README.md](../demo/README.md) | 运行说明 |
 
 ## Demo
