@@ -54,6 +54,16 @@
 - `mtop.taobao.idle.local.poi.get` — 发布地址/POI
 - `stream-upload.goofish.com` — 图片上传
 
+## Demo 代码
+
+可运行 Demo 位于仓库根目录 **[`../demo/`](../demo/)**：
+
+- `demo/xianyu/` — 闲鱼脚本
+- `demo/baidu-pan/` — 百度网盘脚本
+- `demo/web/` — Next.js 统一测试台
+
+本目录仅保留调研文档。
+
 ## 下一步
 
 1. 明确业务形态：个人闲置 vs 企业 ISV vs 同城服务

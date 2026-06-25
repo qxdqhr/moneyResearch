@@ -16,8 +16,10 @@ build/
 # 敏感数据
 .env
 .env.*
-data/cookies.json
 **/data/cookies.json
+demo/xianyu/data/cookies.json
+demo/baidu-pan/data/cookies.json
+demo/quark-pan/data/cookies.json
 
 # OS / Editor
 .DS_Store
