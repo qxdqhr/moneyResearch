@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type Tab = "xianyu" | "baidu-pan" | "quark-pan";
+type Tab = "xianyu" | "baidu-pan" | "quark-pan" | "xiaohongshu" | "bilibili-mall";
 
 type ApiResult = {
   ok?: boolean;
@@ -55,6 +55,23 @@ export default function HomePage() {
   const [qkSavePath, setQkSavePath] = useState("/转存调研");
   const [qkNewSharePwd, setQkNewSharePwd] = useState("x1y2");
 
+  // 小红书
+  const [xhsCookie, setXhsCookie] = useState("");
+  const [xhsTopic, setXhsTopic] = useState("周末探店");
+  const [xhsTitle, setXhsTitle] = useState("");
+  const [xhsDesc, setXhsDesc] = useState("");
+  const [xhsSignUri, setXhsSignUri] = useState("/api/sns/web/v2/user/me");
+  const [xhsSignData, setXhsSignData] = useState("{}");
+  const [xhsImage, setXhsImage] = useState("assets/sample.jpg");
+  const [xhsDryRun, setXhsDryRun] = useState(true);
+
+  // B 站会员购
+  const [blCookie, setBlCookie] = useState("");
+  const [blUrl, setBlUrl] = useState("https://show.bilibili.com/platform/detail.html?id=100000");
+  const [blScreenId, setBlScreenId] = useState("");
+  const [blSkuId, setBlSkuId] = useState("");
+  const [blDryRun, setBlDryRun] = useState(true);
+
   async function run(action: string, fn: () => Promise<ApiResult>) {
     setLoading(action);
     try {
@@ -71,7 +88,7 @@ export default function HomePage() {
     <main>
       <h1>moneyResearch Demo 测试台</h1>
       <p className="subtitle">
-        统一调用 <code>demo/xianyu</code>、<code>demo/baidu-pan</code>、<code>demo/quark-pan</code> 下的 Python 脚本。
+        统一调用 <code>demo/</code> 下各平台 Python 脚本（闲鱼、网盘、小红书、B 站会员购等）。
       </p>
 
       <div className="tabs">
@@ -83,6 +100,12 @@ export default function HomePage() {
         </button>
         <button className={tab === "quark-pan" ? "tab active" : "tab"} onClick={() => setTab("quark-pan")}>
           夸克网盘
+        </button>
+        <button className={tab === "xiaohongshu" ? "tab active" : "tab"} onClick={() => setTab("xiaohongshu")}>
+          小红书
+        </button>
+        <button className={tab === "bilibili-mall" ? "tab active" : "tab"} onClick={() => setTab("bilibili-mall")}>
+          B站会员购
         </button>
       </div>
 
@@ -356,7 +379,7 @@ export default function HomePage() {
             </div>
           </section>
         </div>
-      ) : (
+      ) : tab === "quark-pan" ? (
         <div className="grid">
           <section className="card">
             <h2>
@@ -498,6 +521,298 @@ export default function HomePage() {
                 }
               >
                 一键转存并分享
+              </button>
+            </div>
+          </section>
+        </div>
+      ) : tab === "xiaohongshu" ? (
+        <div className="grid">
+          <section className="card">
+            <h2>
+              01 Cookie 登录 <span className="badge">xiaohongshu/01_cookie_login.py</span>
+            </h2>
+            <label>Cookie（留空读 demo/xiaohongshu/data/cookies.json）</label>
+            <textarea
+              value={xhsCookie}
+              onChange={(e) => setXhsCookie(e.target.value)}
+              placeholder="a1=...; web_session=...; webId=..."
+            />
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("xhs-cookie", () =>
+                    callApi("/api/xiaohongshu/cookie-login", { cookie: xhsCookie || undefined, save: true }),
+                  )
+                }
+              >
+                检测登录
+              </button>
+            </div>
+          </section>
+
+          <section className="card">
+            <h2>
+              02 请求签名 <span className="badge">xiaohongshu/02_sign.py</span>
+            </h2>
+            <label>API URI</label>
+            <input value={xhsSignUri} onChange={(e) => setXhsSignUri(e.target.value)} />
+            <label>Body JSON</label>
+            <textarea value={xhsSignData} onChange={(e) => setXhsSignData(e.target.value)} rows={3} />
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("xhs-sign", () =>
+                    callApi("/api/xiaohongshu/sign", {
+                      uri: xhsSignUri,
+                      data: xhsSignData,
+                      cookie: xhsCookie || undefined,
+                    }),
+                  )
+                }
+              >
+                生成 x-s / x-t
+              </button>
+            </div>
+          </section>
+
+          <section className="card">
+            <h2>
+              03 文案生成 <span className="badge">xiaohongshu/03_copywriting.py</span>
+            </h2>
+            <label>主题</label>
+            <input value={xhsTopic} onChange={(e) => setXhsTopic(e.target.value)} />
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("xhs-copy", () => callApi("/api/xiaohongshu/copywriting", { topic: xhsTopic }))
+                }
+              >
+                生成标题与正文
+              </button>
+            </div>
+          </section>
+
+          <section className="card">
+            <h2>
+              04 图片上传 <span className="badge">xiaohongshu/04_upload_image.py</span>
+            </h2>
+            <label>图片路径（相对 demo/xiaohongshu/）</label>
+            <input value={xhsImage} onChange={(e) => setXhsImage(e.target.value)} />
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("xhs-upload", () =>
+                    callApi("/api/xiaohongshu/upload-image", {
+                      image: xhsImage,
+                      cookie: xhsCookie || undefined,
+                    }),
+                  )
+                }
+              >
+                上传到素材库
+              </button>
+            </div>
+          </section>
+
+          <section className="card">
+            <h2>
+              05 发布笔记 <span className="badge">xiaohongshu/05_publish_note.py</span>
+            </h2>
+            <label>标题（留空用文案生成）</label>
+            <input value={xhsTitle} onChange={(e) => setXhsTitle(e.target.value)} placeholder="≤20字" />
+            <label>正文</label>
+            <textarea value={xhsDesc} onChange={(e) => setXhsDesc(e.target.value)} rows={4} />
+            <label className="checkbox">
+              <input type="checkbox" checked={xhsDryRun} onChange={(e) => setXhsDryRun(e.target.checked)} />
+              dry-run（仅预览，不真发）
+            </label>
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("xhs-publish", () =>
+                    callApi("/api/xiaohongshu/publish", {
+                      topic: xhsTopic,
+                      title: xhsTitle || undefined,
+                      desc: xhsDesc || undefined,
+                      images: [xhsImage],
+                      dryRun: xhsDryRun,
+                      cookie: xhsCookie || undefined,
+                    }),
+                  )
+                }
+              >
+                发布图文笔记
+              </button>
+            </div>
+          </section>
+
+          <section className="card" style={{ gridColumn: "1 / -1" }}>
+            <h2>
+              06 全流程 <span className="badge">xiaohongshu/06_pipeline.py</span>
+            </h2>
+            <p className="hint">文案 → 上传 → 发布（默认 dry-run）</p>
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("xhs-pipeline", () =>
+                    callApi("/api/xiaohongshu/pipeline", {
+                      topic: xhsTopic,
+                      title: xhsTitle || undefined,
+                      desc: xhsDesc || undefined,
+                      images: [xhsImage],
+                      dryRun: xhsDryRun,
+                      cookie: xhsCookie || undefined,
+                    }),
+                  )
+                }
+              >
+                一键发帖流程
+              </button>
+            </div>
+          </section>
+        </div>
+      ) : (
+        <div className="grid">
+          <section className="card">
+            <h2>
+              01 Cookie 登录 <span className="badge">bilibili-mall/01_cookie_login.py</span>
+            </h2>
+            <label>Cookie（留空读 demo/bilibili-mall/data/cookies.json）</label>
+            <textarea
+              value={blCookie}
+              onChange={(e) => setBlCookie(e.target.value)}
+              placeholder="SESSDATA=...; bili_jct=...; DedeUserID=..."
+            />
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("bl-cookie", () =>
+                    callApi("/api/bilibili-mall/cookie-login", { cookie: blCookie || undefined, save: true }),
+                  )
+                }
+              >
+                检测登录
+              </button>
+            </div>
+          </section>
+
+          <section className="card">
+            <h2>
+              02 bili_ticket <span className="badge">bilibili-mall/02_bili_ticket.py</span>
+            </h2>
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("bl-ticket", () =>
+                    callApi("/api/bilibili-mall/bili-ticket", { cookie: blCookie || undefined }),
+                  )
+                }
+              >
+                生成 bili_ticket
+              </button>
+            </div>
+          </section>
+
+          <section className="card">
+            <h2>
+              03 解析链接 <span className="badge">bilibili-mall/03_parse_link.py</span>
+            </h2>
+            <label>票务/市集链接</label>
+            <input value={blUrl} onChange={(e) => setBlUrl(e.target.value)} />
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() => run("bl-parse", () => callApi("/api/bilibili-mall/parse-link", { url: blUrl }))}
+              >
+                解析链接
+              </button>
+            </div>
+          </section>
+
+          <section className="card">
+            <h2>
+              04 票档/市集 <span className="badge">bilibili-mall/04_list_inventory.py</span>
+            </h2>
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("bl-list", () =>
+                    callApi("/api/bilibili-mall/list-inventory", { url: blUrl, cookie: blCookie || undefined }),
+                  )
+                }
+              >
+                查询场次票档
+              </button>
+              <button
+                disabled={loading !== null}
+                onClick={() => run("bl-market", () => callApi("/api/bilibili-mall/list-inventory", { market: true }))}
+              >
+                市集列表
+              </button>
+            </div>
+          </section>
+
+          <section className="card">
+            <h2>
+              05 预下单 <span className="badge">bilibili-mall/05_prepare_order.py</span>
+            </h2>
+            <label>screen_id</label>
+            <input value={blScreenId} onChange={(e) => setBlScreenId(e.target.value)} placeholder="从 04 结果复制" />
+            <label>sku_id</label>
+            <input value={blSkuId} onChange={(e) => setBlSkuId(e.target.value)} placeholder="从 04 结果复制" />
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() => {
+                  if (!blScreenId || !blSkuId) return;
+                  run("bl-prepare", () =>
+                    callApi("/api/bilibili-mall/prepare-order", {
+                      url: blUrl,
+                      screenId: Number(blScreenId),
+                      skuId: Number(blSkuId),
+                      cookie: blCookie || undefined,
+                    }),
+                  );
+                }}
+              >
+                预下单 prepare
+              </button>
+            </div>
+          </section>
+
+          <section className="card" style={{ gridColumn: "1 / -1" }}>
+            <h2>
+              06 全流程 <span className="badge">bilibili-mall/06_pipeline.py</span>
+            </h2>
+            <label className="checkbox">
+              <input type="checkbox" checked={blDryRun} onChange={(e) => setBlDryRun(e.target.checked)} />
+              dry-run（默认仅预览，不调用 prepare）
+            </label>
+            <div className="row">
+              <button
+                disabled={loading !== null}
+                onClick={() =>
+                  run("bl-pipeline", () =>
+                    callApi("/api/bilibili-mall/pipeline", {
+                      url: blUrl,
+                      screenId: blScreenId ? Number(blScreenId) : undefined,
+                      skuId: blSkuId ? Number(blSkuId) : undefined,
+                      dryRun: blDryRun,
+                      cookie: blCookie || undefined,
+                    }),
+                  )
+                }
+              >
+                一键购票流程
               </button>
             </div>
           </section>

@@ -20,6 +20,8 @@ build/
 demo/xianyu/data/cookies.json
 demo/baidu-pan/data/cookies.json
 demo/quark-pan/data/cookies.json
+demo/xiaohongshu/data/cookies.json
+demo/bilibili-mall/data/cookies.json
 
 # OS / Editor
 .DS_Store

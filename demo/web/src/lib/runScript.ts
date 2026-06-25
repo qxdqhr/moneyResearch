@@ -28,6 +28,22 @@ export type QuarkPanScript =
   | "05_create_share"
   | "06_pipeline";
 
+export type XiaohongshuScript =
+  | "01_cookie_login"
+  | "02_sign"
+  | "03_copywriting"
+  | "04_upload_image"
+  | "05_publish_note"
+  | "06_pipeline";
+
+export type BilibiliMallScript =
+  | "01_cookie_login"
+  | "02_bili_ticket"
+  | "03_parse_link"
+  | "04_list_inventory"
+  | "05_prepare_order"
+  | "06_pipeline";
+
 type RunResult = {
   ok: boolean;
   code: number;
@@ -98,4 +114,12 @@ export function runBaiduPanScript(script: BaiduPanScript, args: string[] = []) {
 
 export function runQuarkPanScript(script: QuarkPanScript, args: string[] = []) {
   return runPythonScript(path.join(DEMO_ROOT, "quark-pan"), script, args);
+}
+
+export function runXiaohongshuScript(script: XiaohongshuScript, args: string[] = []) {
+  return runPythonScript(path.join(DEMO_ROOT, "xiaohongshu"), script, args);
+}
+
+export function runBilibiliMallScript(script: BilibiliMallScript, args: string[] = []) {
+  return runPythonScript(path.join(DEMO_ROOT, "bilibili-mall"), script, args);
 }
